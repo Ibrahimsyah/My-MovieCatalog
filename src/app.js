@@ -34,15 +34,6 @@ const App = () => {
     }
     searchBar.addEventListener('keyup', searchListener)
     document.addEventListener('scroll', () => {
-        const maxHeight = Math.max(
-            document.documentElement["clientHeight"],
-            document.body["scrollHeight"],
-            document.documentElement["scrollHeight"],
-            document.body["offsetHeight"],
-            document.documentElement["offsetHeight"]
-        );
-        const current = window.pageYOffset
-        console.log(current, "  ", maxHeight)
     })
     fetchMovies(current.query, current.page)
 }

@@ -27,8 +27,17 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      inject: true,
       template: "./src/index.html",
       filename: "index.html",
+      minify: {
+        removeComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        minifyCSS: true,
+        minifyURLs: true,
+        minifyJS: true
+      }
     }),
   ],
 };
