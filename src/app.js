@@ -1,9 +1,50 @@
 import "regenerator-runtime"
-import './index.css'
-
+import './index.scss'
+import './components/MovieList'
+import api from './provider/tmdb'
 
 const App = () => {
-    //TODO: Fetch Movie Data
+    const searchBar = document.querySelector('.search-bar')
+    let timeout = null
+    const current = {
+        query: "avenger",
+        page: 1
+    }
+
+    const fetchMovies = async (keyword, page, infiniteScroll) => {
+        const result = await api.list('/search/movie', keyword, page)
+        const el = document.querySelector('movie-list')
+        el.infiniteScroll = infiniteScroll
+        el.dataSource = result
+    }
+    const searchListener = (e) => {
+        if (e.which === 13) {
+            const keyword = e.target.value
+            fetchMovies(keyword, 1)
+        } else {
+            const query = e.target.value
+            if (!query) {
+                timeout = setTimeout(() => {
+                    fetchMovies(current.query, current.page)
+                }, 1000)
+            } else {
+                clearTimeout(timeout)
+            }
+        }
+    }
+    searchBar.addEventListener('keyup', searchListener)
+    document.addEventListener('scroll', () => {
+        const maxHeight = Math.max(
+            document.documentElement["clientHeight"],
+            document.body["scrollHeight"],
+            document.documentElement["scrollHeight"],
+            document.body["offsetHeight"],
+            document.documentElement["offsetHeight"]
+        );
+        const current = window.pageYOffset
+        console.log(current, "  ", maxHeight)
+    })
+    fetchMovies(current.query, current.page)
 }
 
 export default App

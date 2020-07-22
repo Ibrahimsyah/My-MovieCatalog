@@ -1,10 +1,16 @@
 class SearchBar extends HTMLElement {
+
   connectedCallback() {
+    this.placeholder = this.getAttribute('placeholder') || "Input Anything"
     this.render();
   }
 
   render() {
-    this.innerHTML = "<h1>Search Bar</h1>"
+    const element = document.createElement('input')
+    element.type = 'text'
+    element.placeholder = this.placeholder
+    element.className = "search-bar"
+    this.appendChild(element)
   }
 }
 
