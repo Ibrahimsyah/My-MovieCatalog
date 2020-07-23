@@ -6,16 +6,20 @@ import api from './provider/tmdb'
 const App = () => {
     const searchBar = document.querySelector('.search-bar')
     let timeout = null
-    const current = {
+    let loading = false
+    let current = {
         query: "avenger",
         page: 1
     }
 
     const fetchMovies = async (keyword, page, infiniteScroll) => {
+        loading = true
         const result = await api.list('/search/movie', keyword, page)
         const el = document.querySelector('movie-list')
         el.infiniteScroll = infiniteScroll
         el.dataSource = result
+        console.log(result)
+        if (result.length > 0) loading = false
     }
     const searchListener = (e) => {
         if (e.which === 13) {
@@ -34,6 +38,13 @@ const App = () => {
     }
     searchBar.addEventListener('keyup', searchListener)
     document.addEventListener('scroll', () => {
+        const currentOffset = document.body.scrollTop + document.body.clientHeight
+        const total = document.body.offsetHeight;
+        if (currentOffset > total - 300 && !loading) {
+            current.page++
+            loading = false
+            fetchMovies(current.query, current.page, true)
+        }
     })
     fetchMovies(current.query, current.page)
 }

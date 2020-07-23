@@ -1,11 +1,19 @@
+import './MovieDialog'
 class MovieCard extends HTMLElement {
-    set content(content) {
-        this._content = content;
-        this.render()
-    }
-    render() {
-        const content = this._content
-        this.innerHTML = `
+  set content(content) {
+    this._content = content;
+    this.render()
+    this.addEventListener('click', () => {
+      const dialog = document.createElement('movie-dialog')
+      dialog.content = this._content
+      dialog.style.display = 'initial'
+      const container = document.querySelector('.container')
+      container.appendChild(dialog)
+    })
+  }
+  render() {
+    const content = this._content
+    this.innerHTML = `
         <div class="card">
           <img
             src="https://image.tmdb.org/t/p/w200/${content.poster_path}"
@@ -16,7 +24,7 @@ class MovieCard extends HTMLElement {
           <p class="title">${content.title}</p>
           <p class="release_date">${content.release_date}</p>
         </div>`
-    }
+  }
 }
 
 customElements.define('movie-card', MovieCard)
