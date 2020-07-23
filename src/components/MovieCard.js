@@ -5,8 +5,7 @@ class MovieCard extends HTMLElement {
     this.render()
     this.addEventListener('click', () => {
       const dialog = document.createElement('movie-dialog')
-      dialog.content = this._content
-      dialog.style.display = 'initial'
+      dialog.id = this._content.id
       const container = document.querySelector('.container')
       container.appendChild(dialog)
     })

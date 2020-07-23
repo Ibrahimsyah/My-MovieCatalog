@@ -14,12 +14,11 @@ const App = () => {
 
     const fetchMovies = async (keyword, page, infiniteScroll) => {
         loading = true
-        const result = await api.list('/search/movie', keyword, page)
+        const {results} = await api.list('/search/movie', keyword, page)
         const el = document.querySelector('movie-list')
         el.infiniteScroll = infiniteScroll
-        el.dataSource = result
-        console.log(result)
-        if (result.length > 0) loading = false
+        el.dataSource = results
+        loading = false
     }
     const searchListener = (e) => {
         if (e.which === 13) {
@@ -42,7 +41,6 @@ const App = () => {
         const total = document.body.offsetHeight;
         if (currentOffset > total - 300 && !loading) {
             current.page++
-            loading = false
             fetchMovies(current.query, current.page, true)
         }
     })
